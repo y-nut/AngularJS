@@ -1,0 +1,53 @@
+<!DOCTYPE HTML>
+<html lang="en-US" ng-app="nameApp">
+	<head>
+		<meta charset="UTF-8">
+		<title>Angular JS</title>
+		<link rel="stylesheet" type="text/css" href="assets/css/webudget.css"/>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
+
+		<script>
+			var nameApp = angular.module("nameApp",[]);
+			nameApp.controller('NameCtrl',function ($scope){
+				$scope.cars = ["Volvo","Mercedes","Citroen"];
+				$scope.defaultCar = $scope.cars[0]; // Volvo
+				
+				 $scope.colors = [
+				  {name:'black', shade:'dark'},
+				  {name:'white', shade:'light', notAnOption: true},
+				  {name:'red', shade:'dark'},
+				  {name:'blue', shade:'dark', notAnOption: true},
+				  {name:'yellow', shade:'light', notAnOption: false}
+				];
+				$scope.myColor = $scope.colors[2]; // red
+			})
+			
+			
+
+		</script>
+
+	</head>
+	<body ng-controller="NameCtrl">
+		<h2>Create budget</h2>
+	
+		<p>Select car model</p>
+		<select ng-model="carmodel">
+			<option ng-repeat="car in cars">{{car}}</option>
+		</select>
+		
+		<div>You have selected: </div>
+		<div>{{carmodel}}</div>
+		
+		<hr>
+		 <label>Color (null not allowed):
+			<select ng-model="myColor" ng-options="color.name for color in colors"></select>
+		  </label><br/>
+		    <hr/>
+  Currently selected: {{ {selected_color:myColor} }}
+  <div style="border:solid 1px black; height:20px"
+       ng-style="{'background-color':myColor.name}">
+  </div>
+</div>
+
+	</body>
+</html>
