@@ -9,21 +9,13 @@
 		<script>
 			var nameApp = angular.module("nameApp",[]);
 			nameApp.controller('NameCtrl',function ($scope){
-				$scope.cars = ["Volvo","Mercedes","Citroen"];
-				$scope.defaultCar = $scope.cars[0]; // Volvo
-				
-				 $scope.colors = [
-				  {name:'black', shade:'dark'},
-				  {name:'white', shade:'light', notAnOption: true},
-				  {name:'red', shade:'dark'},
-				  {name:'blue', shade:'dark', notAnOption: true},
-				  {name:'yellow', shade:'light', notAnOption: false}
+				$scope.cars = [
+					{name:"Volvo"},
+					{name:"Mercedes"},
+					{name:"Citroen"}
 				];
-				$scope.myColor = $scope.colors[2]; // red
+				$scope.defaultCar = $scope.cars[0]; // Volvo
 			})
-			
-			
-
 		</script>
 
 	</head>
@@ -31,23 +23,9 @@
 		<h2>Create budget</h2>
 	
 		<p>Select car model</p>
-		<select ng-model="carmodel">
-			<option ng-repeat="car in cars">{{car}}</option>
-		</select>
+		<select ng-model="defaultCar" ng-options="car.name for car in cars"></select>
 		
 		<div>You have selected: </div>
-		<div>{{carmodel}}</div>
-		
-		<hr>
-		 <label>Color (null not allowed):
-			<select ng-model="myColor" ng-options="color.name for color in colors"></select>
-		  </label><br/>
-		    <hr/>
-  Currently selected: {{ {selected_color:myColor} }}
-  <div style="border:solid 1px black; height:20px"
-       ng-style="{'background-color':myColor.name}">
-  </div>
-</div>
-
+		<div>{{defaultCar.name}}</div>
 	</body>
 </html>
