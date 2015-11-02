@@ -1,0 +1,71 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+	<head>
+		<meta charset="UTF-8">
+		<title>{{pageTitle}}</title>
+		<link rel="stylesheet" type="text/css" href="assets/css/webudget.css"/>
+	</head>
+	<body class="page">
+		<h2>Create budget</h2>
+		<select id="selectCar">
+		  <option >Volvo</option>
+		  <option >Saab</option>
+		  <option >Mercedes</option>
+		  <option >Audi</option>
+		</select>
+		
+		<select id="selectName">
+		  <option >lasse</option>
+		  <option >fido</option>
+		  <option>ligo</option>
+		  <option >sanne</option>
+		</select>
+		
+		<div>You have selected:</div>
+		<div id="carChosen"></div>
+			
+		<script src="assets/js/handlebars.js" type="text/javascript">
+			//This script has to do with {{variables}} inside the DOM
+		</script>
+		<script src="assets/js/jquery.js" type="text/javascript">
+			//Jquery
+		</script>
+
+
+		<script type="text/javascript">
+			
+			//DOMinit.js
+			//select
+			var select = function(){
+				//This function ensures that the value attribute of select tags always are named with respect to the selected item
+				//There may be another workaround with Angular Js
+				
+				//Initialize the dropdown value at page load
+				x = document.getElementsByTagName("select");	
+				for (i = 0; i < x.length; i++) {
+					selected =$('option:selected', x[i]).val()
+					x[i].setAttribute("value",selected) 
+				}
+				
+				//Change the dropdown value at selection
+				$("select").on("click",function(){
+					selected = $('option:selected', $(this)).val()
+					$(this).attr("value",selected) 
+				})
+			}
+			
+			//budgets.js
+
+			
+			$(document).ready(function(){		
+				select()
+				//Do sth with the selected/initial values of the select lists
+				$('select').on('change', function() {
+				  selectId = this.id
+				  selectValue = this.value
+				});
+			})
+
+		</script>
+	</body>
+</html>

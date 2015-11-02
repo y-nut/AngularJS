@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html lang="en-US" ng-app="weBudgetApp">
+	<head>
+		<meta charset="UTF-8">
+		<title>Angular JS</title>
+		<link rel="stylesheet" type="text/css" href="assets/css/webudget.css"/>
+		<script src="assets/js/angular.min.js"></script>
+
+		<script>
+			var weBudgetApp = angular.module("weBudgetApp",[]);
+			weBudgetApp.controller('budgetCtrl',function ($scope){
+				$scope.cars = [
+					{name:"Volvo"},
+					{name:"Mercedes"},
+					{name:"Citroen"}
+				];
+				$scope.defaultCar = $scope.cars[0]; // Volvo
+				
+			})
+		</script>
+
+	</head>
+	<body ng-controller="budgetCtrl" >
+		<h2>Create budget</h2>
+		
+		<label>Add car model to list: </label><br/>
+		<input ></input>
+		<hr>
+	
+		<label>Select car model<br/>
+			<select ng-model="defaultCar" ng-options="car.name for car in cars"></select>
+		</label>
+		
+		<label>You have selected: </label><br/>
+		<p>{{defaultCar.name}}</p>
+	</body>
+</html>
