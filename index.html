@@ -7,31 +7,65 @@
 		<script src="assets/js/angular.min.js"></script>
 
 		<script>
+			//Generic
+			//http://stackoverflow.com/questions/8668174/indexof-method-in-an-object-array
+			var checkExisting = function (myArray, searchTerm, property) {
+				for(var i = 0, len = myArray.length; i < len; i++) {
+					if ( angular.lowercase(myArray[i][property]) === angular.lowercase(searchTerm)) return true; //This person is found in the list. Alternatively i if you want to reference the already given person for sth else.
+				}
+				return false; //not found in array
+			}
+			
+		
+			//Budgets
 			var weBudgetApp = angular.module("weBudgetApp",[]);
 			weBudgetApp.controller('budgetCtrl',function ($scope){
-				$scope.cars = [
-					{name:"Volvo"},
-					{name:"Mercedes"},
-					{name:"Citroen"}
+			
+			//Create array with default users
+				$scope.users = [
+					{name:"Merete",id:0},
+					{name:"Line",id:1},
+					{name:"Lone",id:2}
 				];
-				$scope.defaultCar = $scope.cars[0]; // Volvo
 				
+				//Defines default name in dropdown list
+				if(!$scope.users.length< 1){
+					$scope.defaultName = $scope.users[0]; // Volvo
+				} else {
+					$scope.defaultName = "Add names to list"; // Volvo
+				}
+				
+				
+				//Function to add name to list
+				
+				$scope.addName = function(){
+					var $checkExisting = checkExisting($scope.users, $scope.enteredName, "name")
+					if(!$checkExisting){
+						$scope.users.push({name:$scope.enteredName,id:$scope.users.length});
+						$scope.enteredName = ""; // resets input field. Do not change!
+					} else{
+						alert("sorry dude, already taken")
+					}
+				}
 			})
 		</script>
 
 	</head>
 	<body ng-controller="budgetCtrl" >
-		<h2>Create budget</h2>
+		<h2>Add budget</h2>
+		<form ng-submit="addName()">
+			<label>Add user to the list: </label><br/>
+			<input type="text" ng-model="enteredName"></input>
+			<input type="submit" value="Add name to list"></input>
+		</form>
 		
-		<label>Add car model to list: </label><br/>
-		<input ></input>
 		<hr>
-	
-		<label>Select car model<br/>
-			<select ng-model="defaultCar" ng-options="car.name for car in cars"></select>
+		<h2>Add payment</h2>
+		<label>Select user<br/>
+			<select ng-model="defaultName" ng-options="user.name for user in users track by user.id"></select>
 		</label>
 		
 		<label>You have selected: </label><br/>
-		<p>{{defaultCar.name}}</p>
+		<p >{{defaultName.name}} with id {{defaultName.id}}</p>
 	</body>
 </html>
