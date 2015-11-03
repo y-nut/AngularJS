@@ -7,65 +7,142 @@
 		<script src="assets/js/angular.min.js"></script>
 
 		<script>
-			//Generic
+			//Special thanks to
+			//https://www.youtube.com/watch?v=TRrL5j3MIvo&list=PL4CDmtOXZQHWVjXKHjWoBUFwhTVPyyqGK
+			
+			//Generic.js
 			//http://stackoverflow.com/questions/8668174/indexof-method-in-an-object-array
-			var checkExisting = function (myArray, searchTerm, property) {
-				for(var i = 0, len = myArray.length; i < len; i++) {
-					if ( angular.lowercase(myArray[i][property]) === angular.lowercase(searchTerm)) return true; //This person is found in the list. Alternatively i if you want to reference the already given person for sth else.
+			var checkExisting = function (myArray, propVal, property) {
+				//myArray being the array you want to look inside
+				//propVal being the property value you want to find
+				//property being the property of propVal
+				
+				var tmpArray = [];
+				propVal = angular.lowercase(propVal)
+				
+				for (i in myArray){
+					tmpArray.push(angular.lowercase(myArray[i][property]))
 				}
-				return false; //not found in array
+
+				if(tmpArray.indexOf(propVal) > -1){ //true if propVal exists
+					for(var i = 0, len = myArray.length; i < len; i++) {
+						if ( tmpArray[i] === propVal) {
+							console.log("Property found")
+							return parseInt(myArray[i].id); //This person is found in the list. 
+						} 
+					}
+				} else {
+					return -1; //not found in array
+					console.log("Property not found")
+				}
 			}
 			
-		
-			//Budgets
+			//http://stackoverflow.com/questions/1669190/javascript-min-max-array-values
+			Array.prototype.max = function() {
+			  return Math.max.apply(null, this);
+			};
+
+			Array.prototype.min = function() {
+			  return Math.min.apply(null, this);
+			};
+			
+			//http://stackoverflow.com/questions/15287865/remove-array-element-based-on-object-property
+			var rmvById = function(myArray,id){
+				for( i=myArray.length-1; i>=0; i--) {
+					if( myArray[i].id == id) myArray.splice(i,1);
+				}
+			}
+			
+			var upd = function(myArray,id,newName, test){
+				for( i=myArray.length-1; i>=0; i--) {
+					if( myArray[i].id == id && test == -1) {
+						myArray[i].name = newName;
+					}
+				}
+			}
+			
+			//###################################
+			//Budgets.js
 			var weBudgetApp = angular.module("weBudgetApp",[]);
 			weBudgetApp.controller('budgetCtrl',function ($scope){
 			
 			//Create array with default users
-				$scope.users = [
-					{name:"Merete",id:0},
-					{name:"Line",id:1},
-					{name:"Lone",id:2}
-				];
-				
-				//Defines default name in dropdown list
-				if(!$scope.users.length< 1){
-					$scope.defaultName = $scope.users[0]; // Volvo
+			$scope.users = [
+				{name:"Merete",id:0},
+				{name:"Line",id:1},
+				{name:"Lone",id:2}
+			];
+			
+			//Defines default name in dropdown list
+			$scope.default = $scope.users[0]; // initializes value at load
+			if($scope.users.length < 1){
+				$scope.default = "Add names to list"; // Volvo
+			}
+			
+			//Function to add name to list
+			$scope.addName = function(){
+				$checkExisting = checkExisting($scope.users, $scope.enteredName, "name");
+				if($checkExisting > -1 ){
+					//console.log("sorry dude, already taken")	
+				} else if( $scope.enteredName == undefined){
+					alert("Undefined!")
 				} else {
-					$scope.defaultName = "Add names to list"; // Volvo
-				}
-				
-				
-				//Function to add name to list
-				
-				$scope.addName = function(){
-					var $checkExisting = checkExisting($scope.users, $scope.enteredName, "name")
-					if(!$checkExisting){
-						$scope.users.push({name:$scope.enteredName,id:$scope.users.length});
-						$scope.enteredName = ""; // resets input field. Do not change!
-					} else{
-						alert("sorry dude, already taken")
+					var newID;
+					var tmpArr = [];
+					for (i=0; i< $scope.users.length;i++){
+						tmpArr.push($scope.users[i].id)
 					}
+					newID = tmpArr.max() + 1;
+					$scope.users.push({name:$scope.enteredName,id:newID});
+					$scope.enteredName = ""; // resets input field. Do not change!
 				}
-			})
-		</script>
+			}
+			
+			//Function to remove name on list
+			$scope.rmvName = function (){
+				rmvById($scope.users,$scope.default.id)
+				$scope.default = $scope.users[0];
+			}
+			
+			//Function to edit name
+			$scope.updName = function (){
+				$checkExisting = checkExisting($scope.users, $scope.selName, "name");
+				upd($scope.users,$scope.default.id,$scope.selName,$checkExisting)
+				if($checkExisting == - 1){
+					$scope.selName = "";
+				}
+			}
+		})
+		
+	</script>
 
 	</head>
 	<body ng-controller="budgetCtrl" >
-		<h2>Add budget</h2>
+		<h1>Angular JS in the works</h1>
+		<p>This is a demonstration based on Angular JS.</p>
+		<h2>Add</h2>
 		<form ng-submit="addName()">
 			<label>Add user to the list: </label><br/>
 			<input type="text" ng-model="enteredName"></input>
-			<input type="submit" value="Add name to list"></input>
+			<input type="submit" value="Add" ></input>
+		</form>
+			
+		<hr>
+		<h2>Remove</h2>
+		<form ng-submit="rmvName()">
+			<label>Select user<br/>
+				<select ng-model="default" ng-options="user.name for user in users track by user.id"></select>
+			</label>
+			<input type="submit" value="Delete" ></input>
 		</form>
 		
 		<hr>
-		<h2>Add payment</h2>
-		<label>Select user<br/>
-			<select ng-model="defaultName" ng-options="user.name for user in users track by user.id"></select>
-		</label>
+		<h2>Edit</h2>
+		<form ng-submit="updName()">
+			<label>Edit name from the list: </label><br/>
+			<input type="text" ng-model="selName"></input>
+			<input type="submit" value="Update" ></input>
+		</form>
 		
-		<label>You have selected: </label><br/>
-		<p >{{defaultName.name}} with id {{defaultName.id}}</p>
 	</body>
 </html>
