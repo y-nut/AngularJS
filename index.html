@@ -18,7 +18,7 @@
 				//property being the property of propVal
 				
 				var tmpArray = [];
-				propVal = angular.lowercase(propVal)
+				var propVal = angular.lowercase(propVal)
 				
 				for (i in myArray){
 					tmpArray.push(angular.lowercase(myArray[i][property]))
@@ -120,14 +120,8 @@
 	<body ng-controller="budgetCtrl" >
 		<h1>Angular JS in the works</h1>
 		<p>This is a demonstration based on Angular JS.</p>
-		<h2>Add</h2>
-		<form ng-submit="addName()">
-			<label>Add user to the list: </label><br/>
-			<input type="text" ng-model="enteredName"></input>
-			<input type="submit" value="Add" ></input>
-		</form>
 			
-		<hr>
+		
 		<h2>Remove</h2>
 		<form ng-submit="rmvName()">
 			<label>Select user<br/>
@@ -137,12 +131,24 @@
 		</form>
 		
 		<hr>
+		
+	<h2>Add</h2>
+		<form ng-submit="addName()">
+			<label>Add user to the list: </label><br/>
+			<input type="text" ng-model="enteredName"></input>
+			<input type="submit" value="Add" ></input>
+		</form>
+		
+		<hr>
 		<h2>Edit</h2>
 		<form ng-submit="updName()">
 			<label>Edit name from the list: </label><br/>
 			<input type="text" ng-model="selName"></input>
 			<input type="submit" value="Update" ></input>
 		</form>
+		
+		<hr>
+		<h2>Checkboxes angular</h2>
 		
 	</body>
 </html>
